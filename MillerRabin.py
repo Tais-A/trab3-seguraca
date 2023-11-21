@@ -33,11 +33,8 @@ def verifica_primo(num):
     return rabin_miller(num)
   return False
 
-def gerar_primo_grande():
-  tamanho_chave = 1024
+def gerar_primo(tamanho_chave):
   while True:
-    num = random.randrange(2**(tamanho_chave-1), 2**(tamanho_chave))
-    print("tentativa: ", num)
+    num = random.randrange(2**tamanho_chave, 2**(tamanho_chave+1)-1)
     if verifica_primo(num):
       return num
-
