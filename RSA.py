@@ -1,6 +1,6 @@
 from MillerRabin import gerar_primo
 import random
-
+import base64
 
 # Calculo de n_aux
 def n_aux(p, q):
@@ -53,11 +53,33 @@ def generate_keys():
   print(f"chaves privadas: {p}, {q}, {d}")
 
 
-def cifrar_RSA(n,e):
-  pass
+def exponenciacao_modular(base, expoente, modulo):
+    resultado = 1
+    base = base % modulo
+    while expoente > 0:
+        if expoente % 2 == 1:
+           resultado = (resultado * base) % modulo
+        expoente = expoente // 2
+        base = (base * base) % modulo
+    return resultado
 
-def decifrar_RSA(d):
-  pass
 
-generate_keys()
+def cifrar_RSA(texto,n,e):
+  texto_cifrado = [pow(ord(char), e, n) for char in texto]
+  return texto_cifrado
 
+
+def decifrar_RSA(texto,n,d):
+  texto_decifrado = [chr(pow(char, d, n)) for char in texto]
+  return texto_decifrado
+
+n = 59857871
+e = 4133
+p = 7517
+q = 7963
+d = 36429581
+texto = "teste"
+#texto = "t"
+print(cifrar_RSA(texto,n,e))
+texto = cifrar_RSA(texto,n,e)
+print(decifrar_RSA(texto,n,d))
