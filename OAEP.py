@@ -1,8 +1,7 @@
 import math
 import hashlib
-import sys
-import binascii
 import os
+import random
 
 
 def HexstringToCharacters(hexstr):
@@ -33,10 +32,11 @@ def aplicar_oaep(mensagem, chaves_publicas):
     mensagem_hex = mensagem.encode().hex()
   
     
-    random_bytes = os.urandom(20)
-    random_hash_r = hashlib.sha1(random_bytes).hexdigest()
-    hash_r = int(random_hash_r,16)
+    #random_bytes = os.urandom(20)
+    # random_hash_r = ''.join(random.choices('0123456789abcdef', k=40))
 
+    random_hash_r = 'cbfcba891efed7e0e620246ed6579c18ef540753'
+    hash_r = int(random_hash_r,16)
     tamanho_chave = int(n.bit_length() / 8)
     tamanho_hash_r = int(hash_r.bit_length() / 8)
     tamanho_preenchimento = int(tamanho_chave - 2 * tamanho_hash_r - tamanho_mensagem - 2)
@@ -57,7 +57,7 @@ def aplicar_oaep(mensagem, chaves_publicas):
     k = tamanho_hash_r + tamanho_preenchimento + tamanho_mensagem + 1
 
   
-    db = int(MGF( hash_r_hex, k), 16) ^ pad
+    db = int(MGF(hash_r_hex, k), 16) ^ pad
     db_hex = hex(db)[2:]
     mascara_db = int(MGF(db_hex, tamanho_hash_r), 16) ^ hash_r
     mascara_db_hex = hex(mascara_db)[2:]
@@ -91,20 +91,18 @@ def remover_oaep(cifra, chave_privada):
 
     pad_hex = hex(pad)[2:]
 
-    mensagem_bytes =  bytes.fromhex(pad_hex)
-    return(mensagem_bytes.decode('latin-1'))
+    mensagem_bytes = bytes.fromhex(pad_hex)
 
     preenchimento_e_mensagem = pad_hex[len(hash_l):]
-    # for i in range(len(preenchimento_e_mensagem)):
-    #     if preenchimento_e_mensagem[i] != '0':
-    #         mensagem = preenchimento_e_mensagem[i+1:]
-        
-            
+    for i in range(len(preenchimento_e_mensagem)):
+        if preenchimento_e_mensagem[i] != '0':
+            mensagem = preenchimento_e_mensagem[i+1:]
+            break
+      
 
-    # print('mensagem ', mensagem)
-    # mensagem_bytes =  bytes.fromhex(mensagem)
-    # print(mensagem_bytes)
+    mensagem_bytes =  bytes.fromhex(mensagem)
 
-    # return mensagem_bytes.decode('utf-8')
+
+    return mensagem_bytes.decode('utf-8')
 
 
