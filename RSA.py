@@ -49,7 +49,6 @@ def generate_keys():
   q = gerar_primo(tamanho_chave)
   n = n_aux(p,q)
   phi = valor_phi(p,q)
-  print(phi)
   d = None
   while not d:
     e = expoente_publico(tamanho_chave, phi)
@@ -57,8 +56,8 @@ def generate_keys():
   chaves_privadas = [n,d]
   chaves_publicas = [n,e]
   print ()
-  print(f"chaves públicas: \n\n n => {n} \n\n e => {e}\n")
-  print(f"chaves privadas: \n\n p => {p} \n\n q => {q} \n\n d => {d}\n")
+  print(f"Chaves Públicas: \n\n n => {n} \n\n e => {e}\n")
+  print(f"Chaves Privadas: \n\n p => {p} \n\n q => {q} \n\n d => {d}\n")
   return ([chaves_privadas,chaves_publicas])
 
 

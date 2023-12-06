@@ -30,10 +30,9 @@ def aplicar_oaep(mensagem, chaves_publicas):
     n,e = chaves_publicas
     tamanho_mensagem = len(mensagem)
     mensagem_hex = mensagem.encode().hex()
-  
     
     #random_bytes = os.urandom(20)
-    # random_hash_r = ''.join(random.choices('0123456789abcdef', k=40))
+    #random_hash_r = ''.join(random.choices('0123456789abcdef', k=40))
 
     random_hash_r = 'cbfcba891efed7e0e620246ed6579c18ef540753'
     hash_r = int(random_hash_r,16)
@@ -41,12 +40,10 @@ def aplicar_oaep(mensagem, chaves_publicas):
     tamanho_hash_r = int(hash_r.bit_length() / 8)
     tamanho_preenchimento = int(tamanho_chave - 2 * tamanho_hash_r - tamanho_mensagem - 2)
 
-
     if tamanho_preenchimento < 0:
         raise ValueError("Mensagem muito longa")
     else:
         ps = '00' * tamanho_preenchimento
-
 
     hash_l = hashlib.sha1().hexdigest()
     tamanho_hash_l = int(len(hash_l) / 2)
@@ -55,13 +52,13 @@ def aplicar_oaep(mensagem, chaves_publicas):
 
     hash_r_hex = hex(hash_r)[2:]
     k = tamanho_hash_r + tamanho_preenchimento + tamanho_mensagem + 1
-
   
     db = int(MGF(hash_r_hex, k), 16) ^ pad
     db_hex = hex(db)[2:]
     mascara_db = int(MGF(db_hex, tamanho_hash_r), 16) ^ hash_r
     mascara_db_hex = hex(mascara_db)[2:]
     mensagem_pad = '00' + mascara_db_hex + db_hex
+
 
     return int(mensagem_pad,16)
 
@@ -92,7 +89,6 @@ def remover_oaep(cifra, chave_privada):
     pad_hex = hex(pad)[2:]
 
     mensagem_bytes = bytes.fromhex(pad_hex)
-
     preenchimento_e_mensagem = pad_hex[len(hash_l):]
     for i in range(len(preenchimento_e_mensagem)):
         if preenchimento_e_mensagem[i] != '0':
@@ -103,6 +99,6 @@ def remover_oaep(cifra, chave_privada):
     mensagem_bytes =  bytes.fromhex(mensagem)
 
 
-    return mensagem_bytes.decode('utf-8')
+    return mensagem_bytes.decode("ascii")
 
 
