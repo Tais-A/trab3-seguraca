@@ -1,6 +1,7 @@
 from assinatura import *
 from RSA import *
 
+print("========= Gerando chaves======")
 chaves_privadas, chaves_publicas = generate_keys()
 texto = "outro teste"
 

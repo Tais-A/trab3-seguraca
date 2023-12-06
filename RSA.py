@@ -62,17 +62,6 @@ def generate_keys():
   return ([chaves_privadas,chaves_publicas])
 
 
-def exponenciacao_modular(base, expoente, modulo):
-    resultado = 1
-    base = base % modulo
-    while expoente > 0:
-        if expoente % 2 == 1:
-           resultado = (resultado * base) % modulo
-        expoente = expoente // 2
-        base = (base * base) % modulo
-    return resultado
-
-
 def cifrar_RSA(m,chave):
   n, e = chave
   return pow(m, e, n)
